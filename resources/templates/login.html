@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LoginPage</title>
+</head>
+<style>
+    *{margin:0 auto; padding: 0; text-align: center;}
+    p{font-family: "Roboto";font-size: 30px;margin-bottom: 30px;}
+    form{width:300px; height:200px;margin-top: 100px;border: 1px solid black;}
+    span{float: left;margin-left: 10px}
+    div{margin-top: 20px;}
+    input{float:right;margin-right: 10px;}
+    #btn{width:30px;margin-top: 30px;}
+</style>
+<body>
+    <form action="/auth/member/login" method="POST">
+        <p>로그인</p>
+        <div><span>email:      </span><input type="text" name="email"></div><br>
+        <div><span>password:   </span><input type="password" name="password"></div><br>
+        <input type="submit" value="login" id="btn">
+    </form>
+</body>
+</html>
