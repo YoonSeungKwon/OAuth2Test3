@@ -1,4 +1,4 @@
-package yoon.test.oAuthTest3.config;
+package yoon.test.oAuthTest3.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -9,15 +9,21 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import yoon.test.oAuthTest3.config.handler.LoginSuccessHandler;
-import yoon.test.oAuthTest3.config.provider.MemberAuthenticationProvider;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import yoon.test.oAuthTest3.security.handler.LoginSuccessHandler;
+import yoon.test.oAuthTest3.security.jwt.JwtAuthenticationFilter;
+import yoon.test.oAuthTest3.security.jwt.JwtProvider;
+import yoon.test.oAuthTest3.security.provider.MemberAuthenticationProvider;
+import yoon.test.oAuthTest3.service.RefreshTokenService;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final JwtProvider jwtProvider;
     private final LoginSuccessHandler successHandler;
+    private final RefreshTokenService refreshTokenService;
     private final MemberAuthenticationProvider authenticationProvider;
 
     @Bean
@@ -33,12 +39,13 @@ public class SecurityConfig {
 
                 //Auth
                 .authorizeHttpRequests(auth->{
-                    auth.anyRequest().permitAll();
+                    auth.requestMatchers("/api/member/*", "/").permitAll();
+                    auth.requestMatchers("/user/*").hasRole("USER");
                 })
 
                 //LoginForm
                 .formLogin(form->{
-                    form.loginPage("/login.html");
+                    form.loginPage("/api/member/login");
                     form.loginProcessingUrl("/auth/member/login");
                     form.usernameParameter("email");
                     form.passwordParameter("password");
@@ -47,6 +54,9 @@ public class SecurityConfig {
 
                 //Authentication Provider
                 .authenticationProvider(authenticationProvider)
+
+                //JWT Filter
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, refreshTokenService), UsernamePasswordAuthenticationFilter.class)
 
                 //Session
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

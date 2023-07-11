@@ -28,7 +28,7 @@ public class mainController {
         return "join";
     }
 
-    @GetMapping("/api/member/user")
+    @GetMapping("/user/member")
     public String userPage(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("name", auth);

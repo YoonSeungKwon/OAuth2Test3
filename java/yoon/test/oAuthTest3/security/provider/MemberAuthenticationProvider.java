@@ -1,4 +1,4 @@
-package yoon.test.oAuthTest3.config.provider;
+package yoon.test.oAuthTest3.security.provider;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -9,6 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import yoon.test.oAuthTest3.domain.Members;
 import yoon.test.oAuthTest3.service.MemberDetailService;
 
 @Component
@@ -22,7 +23,7 @@ public class MemberAuthenticationProvider implements AuthenticationProvider {
         String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
 
-        UserDetails user = memberDetailService.loadUserByUsername(username);
+        Members user = (Members) memberDetailService.loadUserByUsername(username);
         System.out.println(user);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
