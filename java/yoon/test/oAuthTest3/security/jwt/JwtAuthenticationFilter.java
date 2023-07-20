@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import yoon.test.oAuthTest3.domain.RefreshToken;
-import yoon.test.oAuthTest3.service.MemberService;
 import yoon.test.oAuthTest3.service.RefreshTokenService;
 
 import java.io.IOException;
@@ -29,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         long tokenIdx= jwtProvider.resolveRefreshToken(request);
-        if(tokenIdx != -1 && jwtProvider.validateToken(refreshTokenService.findTokenByIdx(tokenIdx))){
+        if(accToken!= null && tokenIdx != -1 && jwtProvider.validateToken(refreshTokenService.findTokenByIdx(tokenIdx))){
             String email = jwtProvider.getId(accToken);
             if(refreshTokenService.checkToken(email, tokenIdx)){
                 response.setHeader("Authorization", jwtProvider.createAccessToken(

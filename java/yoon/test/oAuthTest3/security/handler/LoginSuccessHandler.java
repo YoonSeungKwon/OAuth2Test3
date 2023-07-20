@@ -22,12 +22,16 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         Members member = (Members) authentication.getPrincipal();
+
         String accToken = jwtProvider.createAccessToken(member.getEmail(), member.getName());
         String refToken = jwtProvider.createRefreshToken();
+
         long tokenIdx = refreshTokenService.saveOrUpdateToken(member.getEmail(), refToken);
+
         response.setHeader("Authorization", accToken);
         Cookie cookie = new Cookie("X-Refresh-Token-Idx", String.valueOf(tokenIdx));
         response.addCookie(cookie);
+
         response.sendRedirect("/");
     }
 

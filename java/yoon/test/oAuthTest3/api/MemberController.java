@@ -21,10 +21,15 @@ import java.security.Principal;
 public class MemberController {
 
     private final MemberService memberService;
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test(){
+        System.out.println("Linked");
+        return ResponseEntity.ok("Linked");
+    }
     @PostMapping("/join")
     public ResponseEntity<?> memberJoin(MemberDto dto, HttpServletResponse response) throws IOException {
         MemberResponse memberResponse = memberService.join(dto);
-        response.sendRedirect("/");
         return ResponseEntity.ok(memberResponse);
     }
 
