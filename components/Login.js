@@ -7,7 +7,7 @@ import jwtDecode from "jwt-decode";
 
 const Login = () =>{
 
-    const clientId = "777103182983-cd1afpvq73eo4p86nufq35o0l809h8hl.apps.googleusercontent.com";
+    const clientId = "";
 
     const [token, setToken] = useState({
         email:"",
